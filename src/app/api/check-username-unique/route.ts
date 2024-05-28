@@ -69,4 +69,5 @@ export async function GET(request: Request) {
   }
 }
 
+//NOTE: extra fix
 export const dynamic = "force-dynamic";
