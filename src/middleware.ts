@@ -30,3 +30,5 @@ export async function middleware(request: NextRequest) {
 // export const config = {
 //   matcher: ["/", "/sign-up", "/sign-in", "/dashboard/:path*", "/verify/:path*"],
 // };
+
+export const dynamic = "force-dynamic";
