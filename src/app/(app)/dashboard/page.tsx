@@ -29,11 +29,9 @@ export default function page() {
 
   const { data: session } = useSession();
 
-  const form = useForm({
+  const { register, watch, setValue } = useForm({
     resolver: zodResolver(AcceptMessagesSchema),
   });
-
-  const { register, watch, setValue } = form;
 
   const acceptMessages = watch("acceptMessages");
 
@@ -120,9 +118,9 @@ export default function page() {
 
   //TODO: research more about baseUrl
   //NOTE: for client side
-  // const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  const baseUrl = `${window.location.protocol}//${window.location.host}`;
   //NOTE: for server site
-  const baseUrl = process.env.SITE_URL;
+  // const baseUrl = process.env.SITE_URL;
   const profileUrl = `${baseUrl}/u/${username}`;
 
   const copyToClipboard = () => {
@@ -131,8 +129,6 @@ export default function page() {
       title: "Url copied",
     });
   };
-
-  const handleDeleteMessage = () => {};
 
   if (!session || !session.user) {
     return <div>please login</div>;
@@ -188,7 +184,7 @@ export default function page() {
             <MessageCard
               key={message._id}
               message={message}
-              onMessageDelete={handleDeleteMessage}
+              onMessageDelete={() => handleMessageDelete(message._id)}
             />
           ))
         ) : (

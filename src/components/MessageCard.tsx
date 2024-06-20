@@ -1,4 +1,5 @@
 "use client";
+import { parseISO, format } from "date-fns";
 import {
   Card,
   CardContent,
@@ -37,7 +38,7 @@ export default function MessageCard({
   const { toast } = useToast();
   const handleDeleteConfirm = async () => {
     const response = await axios.delete<ApiResponse>(
-      `/api/delete-nessage/${message._id}`,
+      `/api/delete-message/${message._id}`,
     );
     toast({
       title: response.data.message,
@@ -47,12 +48,11 @@ export default function MessageCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card Description</CardDescription>
+        <CardTitle>{message.content}</CardTitle>
+        <CardDescription>
+          {format(parseISO(message.createdAt.toString()), "dd/MM/yyyy HH:mm")}
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <p>Card Content</p>
-      </CardContent>
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button variant="destructive">

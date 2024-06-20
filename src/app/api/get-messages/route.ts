@@ -25,11 +25,11 @@ export async function GET(request: Request) {
 
   try {
     const user = await UserModel.aggregate([
-      { $match: { id: userId } },
+      { $match: { _id: userId } },
       { $unwind: "$messages" },
-      { $sort: { "$messages.createdAt": -1 } },
+      { $sort: { "messages.createdAt": -1 } },
       { $group: { _id: "$_id", messages: { $push: "$messages" } } },
-    ]);
+    ]).exec();
 
     if (!user || user?.length === 0) {
       return Response.json(
@@ -49,7 +49,7 @@ export async function GET(request: Request) {
       { status: 200 },
     );
   } catch (error) {
-    console.error("unexpected error", error);
+    console.error("unexpected error");
     return Response.json(
       {
         success: false,
