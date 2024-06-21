@@ -23,6 +23,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { MessagesSchema } from "@/schemas/messageSchema";
 import { useCompletion } from "@ai-sdk/react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Completion() {
   const { username } = useParams<{ username: string }>();
@@ -152,7 +153,13 @@ export default function Completion() {
             ) : (
               parseStringMessages(completion).map((message, index) =>
                 !message ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Button
+                    variant="outline"
+                    className="mb-2 h-auto whitespace-normal flex flex-col gap-2"
+                  >
+                    <Skeleton className="w-full h-[16px] rounded-full" />
+                    <Skeleton className="w-3/5 h-[16px] rounded-full" />
+                  </Button>
                 ) : (
                   <Button
                     key={index}
@@ -172,7 +179,7 @@ export default function Completion() {
       <div className="text-center">
         <div className="mb-4">Get Your Message Board</div>
         <Link href={"/sign-up"}>
-          <Button>Create Your Account</Button>
+          <Button>View</Button>
         </Link>
       </div>
     </div>

@@ -29,6 +29,16 @@ export async function POST(request: Request) {
       user.isVerified = true;
       await user.save();
 
+      // await UserModel.findOneAndUpdate(
+      //   {
+      //     username: decodedUsername,
+      //   },
+      //   {
+      //     isVerified: true,
+      //     $unset: { verifyCode: 1, verifyCodeExpiry: 1 },
+      //   },
+      // );
+
       return Response.json(
         {
           success: true,
