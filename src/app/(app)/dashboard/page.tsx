@@ -118,9 +118,10 @@ export default function page() {
 
   //TODO: research more about baseUrl
   //NOTE: for client side
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  // const baseUrl = `${window.location.protocol}//${window.location.host}`;
   //NOTE: for server site
-  // const baseUrl = process.env.SITE_URL;
+  const baseUrl = process.env.SITE_URL;
+
   const profileUrl = `${baseUrl}/u/${username}`;
 
   const copyToClipboard = () => {
