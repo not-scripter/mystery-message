@@ -13,6 +13,7 @@ import axios, { AxiosError } from "axios";
 import { Loader2, RefreshCcw } from "lucide-react";
 import { User } from "next-auth";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -120,7 +121,18 @@ export default function page() {
   //NOTE: for client side
   // const baseUrl = `${window.location.protocol}//${window.location.host}`;
   //NOTE: for server site
-  const baseUrl = process.env.SITE_URL;
+  // const baseUrl = process.env.SITE_URL;
+
+  const router = useRouter();
+  const [baseUrl, setbaseUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const { protocol, hostname, port } = window.location;
+      const baseUrl = `${protocol}//${hostname}${port ? `:${port}` : ""}`;
+      setbaseUrl(baseUrl);
+    }
+  }, [router]);
 
   const profileUrl = `${baseUrl}/u/${username}`;
 
