@@ -1,5 +1,7 @@
 "use client";
 
+import { signOut, useSession } from "next-auth/react";
+import { User } from "next-auth";
 import { Send, MessageSquareOff } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -10,6 +12,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { useChat } from "@ai-sdk/react";
 
 export default function page() {
+  const { data: session } = useSession();
+  const user = session?.user as User;
+
   const { messages, input, handleInputChange, handleSubmit, stop, isLoading } =
     useChat({
       api: "/api/chat",
@@ -28,7 +33,9 @@ export default function page() {
           >
             <Avatar>
               {/* <AvatarImage src={m.role === "user" ? "" : ""} /> */}
-              <AvatarFallback>{m.role === "user" ? "U" : "AI"}</AvatarFallback>
+              <AvatarFallback>
+                {m.role === "user" ? user.username?.charAt(0) : "AI"}
+              </AvatarFallback>
             </Avatar>
           </Label>
           <p
