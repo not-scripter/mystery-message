@@ -150,16 +150,20 @@ export default function Completion() {
             {error ? (
               <p className="text-red-500">{error.message}</p>
             ) : (
-              parseStringMessages(completion).map((message, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  className="mb-2"
-                  onClick={() => handleMessageClick(message)}
-                >
-                  {message}
-                </Button>
-              ))
+              parseStringMessages(completion).map((message, index) =>
+                !message ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    className="mb-2 h-auto whitespace-normal"
+                    onClick={() => handleMessageClick(message)}
+                  >
+                    {message}
+                  </Button>
+                ),
+              )
             )}
           </CardContent>
         </Card>

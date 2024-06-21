@@ -14,22 +14,20 @@ import { SignUpSchema } from "@/schemas/signUpSchema";
 import { ApiResponse } from "@/types/ApiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import { log } from "console";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDebounceCallback } from "usehooks-ts";
+import { useDebounceValue } from "usehooks-ts";
 import * as z from "zod";
 
 export default function page() {
-  const [username, setusername] = useState("");
   const [usernameMessage, setusernameMessage] = useState("");
   const [isCheckingUsername, setisCheckingUsername] = useState(false);
   const [isSubmitting, setisSubmitting] = useState(false);
 
-  const debounced = useDebounceCallback(setusername, 300);
+  const [debouncedUsername, setusername] = useDebounceValue("", 500);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -45,15 +43,15 @@ export default function page() {
 
   useEffect(() => {
     const checkUsernameUnique = async () => {
-      if (username) {
+      if (debouncedUsername) {
         setisCheckingUsername(true);
         setusernameMessage("");
         try {
-          const response = await axios.get(
-            `/api/check-username-uniqe?username=${username}`,
+          const response = await axios.get<ApiResponse>(
+            `/api/check-username-unique?username=${debouncedUsername}`,
           ); //NOTE: axios alternative is ReactQuery
-          console.log(response); //TEST:
           setusernameMessage(response.data.message);
+          console.log(response.data.message);
         } catch (error) {
           const axiosError = error as AxiosError<ApiResponse>;
           setusernameMessage(
@@ -65,7 +63,7 @@ export default function page() {
       }
     };
     checkUsernameUnique();
-  }, [username]);
+  }, [debouncedUsername]);
 
   const onSubmit = async (data: z.infer<typeof SignUpSchema>) => {
     setisSubmitting(true);
@@ -75,7 +73,7 @@ export default function page() {
         title: "Success",
         description: response.data.message,
       });
-      router.replace(`/verify/${username}`);
+      router.replace(`/verify/${debouncedUsername}`);
     } catch (error) {
       console.error("error signup", error);
       const axiosError = error as AxiosError<ApiResponse>;
@@ -114,7 +112,7 @@ export default function page() {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        debounced(e.target.value);
+                        setusername(e.target.value);
                       }}
                     />
                   </FormControl>

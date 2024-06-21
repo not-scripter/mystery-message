@@ -1,6 +1,7 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import { UsernameValidation } from "@/schemas/signUpSchema";
+import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const UsernameValidationSchema = z.object({
@@ -17,11 +18,10 @@ export async function GET(request: Request) {
     };
     // Validate with ZOD
     const result = UsernameValidationSchema.safeParse(queryParams);
-    console.log(result); //TODO: remove
 
     if (!result.success) {
       const usernameErrors = result.error.format().username?._errors || [];
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message:
@@ -41,7 +41,7 @@ export async function GET(request: Request) {
     });
 
     if (existingVerifiedUser) {
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message: "username is already taken",
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
       );
     }
 
-    return Response.json(
+    return NextResponse.json(
       {
         success: true,
         message: "username is unique",
@@ -59,7 +59,7 @@ export async function GET(request: Request) {
     );
   } catch (error) {
     console.error("error checking username", error);
-    return Response.json(
+    return NextResponse.json(
       {
         success: false,
         message: "error checking username",

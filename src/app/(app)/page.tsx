@@ -1,19 +1,17 @@
 "use client";
 
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Mail } from "lucide-react"; // Assuming you have an icon for messages
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import axios from "axios";
+import { format, parseISO } from "date-fns";
 import Autoplay from "embla-carousel-autoplay";
+import { Mail } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
-import NavBar from "@/components/NavBar";
 
 export default function Home() {
   const [recentMessages, setrecentMessages] = useState<any>([]);
@@ -51,7 +49,10 @@ export default function Home() {
                   <div>
                     <p>{message.messages.content}</p>
                     <p className="text-xs text-muted-foreground">
-                      {message.messages.createdAt}
+                      {format(
+                        parseISO(message.messages.createdAt.toString()),
+                        "dd/MM/yyyy HH:mm",
+                      )}
                     </p>
                   </div>
                 </CardContent>

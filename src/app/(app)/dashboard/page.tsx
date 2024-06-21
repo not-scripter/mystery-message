@@ -115,17 +115,9 @@ export default function page() {
   };
 
   // const { username } = session?.user as User; //NOTE: causing error
-  const username = session?.user.username;
-
-  //TODO: research more about baseUrl
-  //NOTE: for client side
-  // const baseUrl = `${window.location.protocol}//${window.location.host}`;
-  //NOTE: for server site
-  // const baseUrl = process.env.SITE_URL;
-
   const router = useRouter();
+  const username = session?.user.username;
   const [baseUrl, setbaseUrl] = useState("");
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const { protocol, hostname, port } = window.location;
@@ -133,7 +125,6 @@ export default function page() {
       setbaseUrl(baseUrl);
     }
   }, [router]);
-
   const profileUrl = `${baseUrl}/u/${username}`;
 
   const copyToClipboard = () => {

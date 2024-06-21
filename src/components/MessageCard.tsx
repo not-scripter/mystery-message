@@ -1,13 +1,6 @@
 "use client";
 import { parseISO, format } from "date-fns";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -49,10 +42,11 @@ export default function MessageCard({
     <Card>
       <CardHeader>
         <CardTitle>{message.content}</CardTitle>
-        <CardDescription>
+        <CardContent>
           {format(parseISO(message.createdAt.toString()), "dd/MM/yyyy HH:mm")}
-        </CardDescription>
+        </CardContent>
       </CardHeader>
+
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button variant="destructive">
