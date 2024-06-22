@@ -1,14 +1,15 @@
 "use client";
 
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
+import { ThemeProviderProps } from "next-themes/dist/types";
 import { useEffect } from "react";
 
-const CustomThemeProvider = ({ children }) => {
+const CustomThemeProvider = ({ children }: ThemeProviderProps) => {
   const { themes, resolvedTheme } = useTheme();
 
   useEffect(() => {
     if (resolvedTheme) {
-      const theme =
+      const theme: any =
         resolvedTheme === "dark"
           ? themes.at(-2)
           : resolvedTheme === "light"
@@ -23,12 +24,13 @@ const CustomThemeProvider = ({ children }) => {
   return <>{children}</>;
 };
 
-const ThemeProviderWrapper = ({ children, ...props }) => {
+export default function ThemeProvider({
+  children,
+  ...props
+}: ThemeProviderProps) {
   return (
     <NextThemesProvider {...props}>
       <CustomThemeProvider>{children}</CustomThemeProvider>
     </NextThemesProvider>
   );
-};
-
-export default ThemeProviderWrapper;
+}

@@ -4,7 +4,7 @@ import "./globals.css";
 import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "@/components/ui/toaster";
 import NavBar from "@/components/NavBar";
-import ThemeProviderWrapper from "@/components/ui/theme-provider";
+import ThemeProvider from "@/components/ui/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <AuthProvider>
         <body>
-          <ThemeProviderWrapper
+          <ThemeProvider
             attribute="class"
             enableSystem
             defaultTheme="system"
@@ -37,7 +37,7 @@ export default function RootLayout({
             <NavBar />
             {children}
             <Toaster />
-          </ThemeProviderWrapper>
+          </ThemeProvider>
           <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
           <script>eruda.init();</script>
         </body>
