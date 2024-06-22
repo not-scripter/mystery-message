@@ -4,6 +4,7 @@ import "./globals.css";
 import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "@/components/ui/toaster";
 import NavBar from "@/components/NavBar";
+import ThemeProviderWrapper from "@/components/ui/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,12 +19,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <AuthProvider>
-        <body className={`min-h-svh`}>
-          <NavBar />
-          {children}
-          <Toaster />
+        <body>
+          <ThemeProviderWrapper
+            attribute="class"
+            enableSystem
+            defaultTheme="system"
+            value={{
+              light: "latte",
+              dark: "mocha",
+              system: "system",
+            }}
+            disableTransitionOnChange
+            themes={["latte", "frappe", "macchiato", "mocha"]}
+          >
+            <NavBar />
+            {children}
+            <Toaster />
+          </ThemeProviderWrapper>
           <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
           <script>eruda.init();</script>
         </body>

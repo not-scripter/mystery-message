@@ -8,6 +8,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 
 import { MessageSquareHeart } from "lucide-react";
 import Link from "next/link";
@@ -17,6 +26,7 @@ import { Button } from "./ui/button";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 
 export default function NavBar() {
+  const { setTheme } = useTheme();
   const { data: session } = useSession();
   const user = session?.user as User;
 
@@ -26,6 +36,33 @@ export default function NavBar() {
         <Link href="/">
           <MessageSquareHeart size="36" />
         </Link>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setTheme("latte")}>
+              Latte
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("frappe")}>
+              Frappe
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("macchiato")}>
+              Macchiato
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("mocha")}>
+              Mocha
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>
+              System
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         {session ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -36,6 +73,7 @@ export default function NavBar() {
             <DropdownMenuContent>
               <DropdownMenuLabel>Settings</DropdownMenuLabel>
               <DropdownMenuSeparator />
+
               <Link href={`/u/${user.username}`}>
                 <DropdownMenuItem>Profile</DropdownMenuItem>
               </Link>
