@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <AuthProvider>
-        <body>
+        <body className="bg-base text-text">
           <ThemeProvider
             attribute="class"
             enableSystem

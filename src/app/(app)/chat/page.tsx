@@ -50,7 +50,7 @@ export default function page() {
 
       <form
         onSubmit={handleSubmit}
-        className="fixed bottom-0 w-full p-4 flex gap-2 bg-gradient-to-t from-primary via-secondary via-80% to-transparent"
+        className="fixed bottom-0 w-full p-4 flex gap-2 bg-gradient-to-t from-base via-surface0 via-80% to-transparent"
       >
         <Input
           value={input}

@@ -2,6 +2,7 @@
 
 import MessageCard from "@/components/MessageCard";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
@@ -10,9 +11,10 @@ import { AcceptMessagesSchema } from "@/schemas/acceptMessageSchema";
 import { ApiResponse } from "@/types/ApiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import { Loader2, RefreshCcw } from "lucide-react";
+import { Loader2, RefreshCcw, CircleArrowOutUpRight } from "lucide-react";
 import { User } from "next-auth";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -135,27 +137,36 @@ export default function page() {
   };
 
   if (!session || !session.user) {
-    return <div>please login</div>;
+    return (
+      <div className="w-full p-40 flex items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
   }
 
   return (
-    <div className="my-8 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
+    <div className="my-8 md:mx-8 lg:mx-auto p-6 rounded w-full max-w-6xl">
       <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 
       <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{" "}
+        <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
+          Visit to your profile
+          <Link href={profileUrl}>
+            <CircleArrowOutUpRight size={16} />
+          </Link>
+        </h2>
         <div className="flex items-center">
-          <input
+          <Input
             type="text"
             value={profileUrl}
             disabled
-            className="input input-bordered w-full p-2 mr-2"
+            className="w-full p-2 mr-2"
           />
           <Button onClick={copyToClipboard}>Copy</Button>
         </div>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 flex items-center">
         <Switch
           {...register("acceptMessages")}
           checked={acceptMessages}
@@ -163,7 +174,7 @@ export default function page() {
           disabled={isSwitchLoading}
         />
         <span className="ml-2">
-          Accept Messages: {acceptMessages ? "On" : "Off"}
+          Accepting Messages: {acceptMessages ? "On" : "Off"}
         </span>
       </div>
       <Separator />

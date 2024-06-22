@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Cat } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { MessageSquareHeart } from "lucide-react";
@@ -26,22 +26,27 @@ import { Button } from "./ui/button";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 
 export default function NavBar() {
-  const { setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const { data: session } = useSession();
   const user = session?.user as User;
 
   return (
-    <nav className="p-4 md:p-6 shadow-md bg-gray-900 text-white">
-      <div className="flex justify-between items-center">
-        <Link href="/">
+    <nav className="sticky top-0 z-10 p-4 md:p-6 shadow-md backdrop-blur-md">
+      <div className="flex relative justify-between items-center">
+        <Link href="/" prefetch className="grow-0">
           <MessageSquareHeart size="36" />
         </Link>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
-              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              {resolvedTheme === "dark" ? (
+                <Moon />
+              ) : resolvedTheme === "light" ? (
+                <Sun />
+              ) : (
+                <Cat />
+              )}
               <span className="sr-only">Toggle theme</span>
             </Button>
           </DropdownMenuTrigger>
@@ -63,9 +68,10 @@ export default function NavBar() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
         {session ? (
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger className="rounded-full">
               <Avatar>
                 <AvatarFallback>{user.username?.charAt(0)}</AvatarFallback>
               </Avatar>
@@ -77,17 +83,14 @@ export default function NavBar() {
               <Link href={`/u/${user.username}`}>
                 <DropdownMenuItem>Profile</DropdownMenuItem>
               </Link>
-              <DropdownMenuItem>
-                <Button onClick={() => signOut}>Logout</Button>
+              <DropdownMenuItem onClick={() => signOut()} className="text-red">
+                Logout
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
           <Link href="/sign-in">
-            <Button
-              className="w-full md:w-auto bg-slate-100 text-black"
-              variant={"outline"}
-            >
+            <Button className="w-full md:w-auto" variant={"outline"}>
               Login
             </Button>
           </Link>
