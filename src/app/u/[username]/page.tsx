@@ -24,6 +24,7 @@ import { useParams } from "next/navigation";
 import { MessagesSchema } from "@/schemas/messageSchema";
 import { useCompletion } from "@ai-sdk/react";
 import { Skeleton } from "@/components/ui/skeleton";
+import Container from "@/components/Container";
 
 export default function Completion() {
   const { username } = useParams<{ username: string }>();
@@ -94,94 +95,96 @@ export default function Completion() {
   };
 
   return (
-    <div className="container mx-auto my-8 p-6 rounded max-w-4xl">
-      <h1 className="text-4xl font-bold mb-6 text-center">
-        Public Profile Link
-      </h1>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="content"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Send Anonymous Message to @{username}</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Write your anonymous message here"
-                    className="resize-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex justify-center">
-            {isLoading ? (
-              <Button disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please wait
-              </Button>
-            ) : (
-              <Button type="submit" disabled={isLoading || !messageContent}>
-                Send It
-              </Button>
-            )}
-          </div>
-        </form>
-      </Form>
+    <Container>
+      <div className="container mx-auto my-8 p-6 rounded max-w-4xl">
+        <h1 className="text-4xl font-bold mb-6 text-center">
+          Public Profile Link
+        </h1>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Send Anonymous Message to @{username}</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Write your anonymous message here"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex justify-center">
+              {isLoading ? (
+                <Button disabled>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </Button>
+              ) : (
+                <Button type="submit" disabled={isLoading || !messageContent}>
+                  Send It
+                </Button>
+              )}
+            </div>
+          </form>
+        </Form>
 
-      <div className="space-y-4 my-8">
-        <div className="space-y-2">
-          <Button
-            onClick={fetchSuggestedMessages}
-            className="my-4"
-            disabled={isSuggesting}
-          >
-            Suggest Messages
-          </Button>
-          <p>Click on any message below to select it.</p>
+        <div className="space-y-4 my-8">
+          <div className="space-y-2">
+            <Button
+              onClick={fetchSuggestedMessages}
+              className="my-4"
+              disabled={isSuggesting}
+            >
+              Suggest Messages
+            </Button>
+            <p>Click on any message below to select it.</p>
+          </div>
+          <Card>
+            <CardHeader>
+              <h3 className="text-xl font-semibold">Messages</h3>
+            </CardHeader>
+            <CardContent className="flex flex-col space-y-4">
+              {error ? (
+                <p className="text-red-500">{error.message}</p>
+              ) : (
+                parseStringMessages(completion).map((message, index) =>
+                  !message ? (
+                    <Button
+                      variant="outline"
+                      className="mb-2 h-auto whitespace-normal flex flex-col gap-2"
+                    >
+                      <Skeleton className="w-full h-[16px] rounded-full" />
+                      <Skeleton className="w-3/5 h-[16px] rounded-full" />
+                    </Button>
+                  ) : (
+                    <Button
+                      key={index}
+                      variant="outline"
+                      className="mb-2 h-auto whitespace-normal"
+                      onClick={() => handleMessageClick(message)}
+                    >
+                      {message}
+                    </Button>
+                  ),
+                )
+              )}
+            </CardContent>
+          </Card>
         </div>
-        <Card>
-          <CardHeader>
-            <h3 className="text-xl font-semibold">Messages</h3>
-          </CardHeader>
-          <CardContent className="flex flex-col space-y-4">
-            {error ? (
-              <p className="text-red-500">{error.message}</p>
-            ) : (
-              parseStringMessages(completion).map((message, index) =>
-                !message ? (
-                  <Button
-                    variant="outline"
-                    className="mb-2 h-auto whitespace-normal flex flex-col gap-2"
-                  >
-                    <Skeleton className="w-full h-[16px] rounded-full" />
-                    <Skeleton className="w-3/5 h-[16px] rounded-full" />
-                  </Button>
-                ) : (
-                  <Button
-                    key={index}
-                    variant="outline"
-                    className="mb-2 h-auto whitespace-normal"
-                    onClick={() => handleMessageClick(message)}
-                  >
-                    {message}
-                  </Button>
-                ),
-              )
-            )}
-          </CardContent>
-        </Card>
+        <Separator className="my-6" />
+        <div className="text-center">
+          <div className="mb-4">Get Your Message Board</div>
+          <Link href={"/sign-up"}>
+            <Button>View</Button>
+          </Link>
+        </div>
       </div>
-      <Separator className="my-6" />
-      <div className="text-center">
-        <div className="mb-4">Get Your Message Board</div>
-        <Link href={"/sign-up"}>
-          <Button>View</Button>
-        </Link>
-      </div>
-    </div>
+    </Container>
   );
 }

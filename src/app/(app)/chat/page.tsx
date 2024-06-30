@@ -21,12 +21,12 @@ export default function page() {
     });
 
   return (
-    <div className="pb-24 flex flex-col gap-2">
-      <Container>
+    <div className="pb-24 w-full">
+      <Container className="flex-col">
         {messages.map((m: any) => (
           <div
             key={m.id}
-            className={`flex p-4 flex-col ${m.role === "user" ? "items-end" : "items-start"}`}
+            className={`flex p-4 flex-col w-full ${m.role === "user" ? "items-end" : "items-start"}`}
           >
             <Label
               htmlFor={m.id}
@@ -52,9 +52,9 @@ export default function page() {
 
       <form
         onSubmit={handleSubmit}
-        className="absolute left-0 bottom-0 w-full p-4 flex gap-2 bg-gradient-to-t from-base via-surface0 via-80% to-transparent"
+        className="fixed bottom-0 w-full bg-gradient-to-t from-base via-surface0 via-80% to-transparent"
       >
-        <Container className="px-0 py-0 flex gap-2">
+        <Container className="gap-4">
           <Input
             value={input}
             placeholder="Say something..."
