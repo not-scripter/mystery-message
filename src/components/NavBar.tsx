@@ -11,10 +11,22 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { Moon, Sun, Cat } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -26,7 +38,7 @@ import { Button } from "./ui/button";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 
 export default function NavBar() {
-  const { resolvedTheme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const { data: session } = useSession();
   const user = session?.user as User;
 
@@ -37,57 +49,59 @@ export default function NavBar() {
           <MessageSquareHeart size="36" />
         </Link>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
-              {resolvedTheme === "dark" ? (
-                <Moon />
-              ) : resolvedTheme === "light" ? (
-                <Sun />
-              ) : (
-                <Cat />
-              )}
-              <span className="sr-only">Toggle theme</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setTheme("latte")}>
-              Latte
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("frappe")}>
-              Frappe
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("macchiato")}>
-              Macchiato
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("mocha")}>
-              Mocha
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("system")}>
-              System
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
         {session ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full">
+          <Drawer>
+            <DrawerTrigger className="rounded-full" asChild>
               <Avatar>
                 <AvatarFallback>{user.username?.charAt(0)}</AvatarFallback>
               </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>Settings</DropdownMenuLabel>
-              <DropdownMenuSeparator />
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader className="text-left">
+                <DrawerTitle className="text-2xl text-subtext0 mb-2">
+                  Settings
+                </DrawerTitle>
+                <DrawerDescription className="text-xl font-semibold">
+                  <Link href={`/u/${user.username}`}>Profile</Link>
 
-              <Link href={`/u/${user.username}`}>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem onClick={() => signOut()} className="text-red">
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  <div className="flex justify-between items-center">
+                    Theme
+                    <Select
+                      onValueChange={(value) => setTheme(value)}
+                      defaultValue={theme}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Choose a theme" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Themes</SelectLabel>
+                          <SelectItem value="latte">Latte</SelectItem>
+                          <SelectItem value="frappe">Frappe</SelectItem>
+                          <SelectItem value="macchiato">Macchiato</SelectItem>
+                          <SelectItem value="mocha">Mocha</SelectItem>
+                          <SelectItem value="system">System</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button
+                    onClick={() => signOut()}
+                    variant={"ghost"}
+                    className="p-0 text-red text-xl"
+                  >
+                    Logout
+                  </Button>
+                </DrawerDescription>
+              </DrawerHeader>
+
+              <DrawerFooter>
+                <DrawerClose asChild>
+                  <Button variant="outline">Close</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
         ) : (
           <Link href="/sign-in">
             <Button className="w-full md:w-auto" variant={"outline"}>

@@ -20,7 +20,9 @@ export async function middleware(request: NextRequest) {
 
   if (
     !token &&
-    (url.pathname.startsWith("/dashboard") || url.pathname.startsWith("/chat"))
+    (url.pathname.startsWith("/dashboard") ||
+      url.pathname.startsWith("/chat") ||
+      url.pathname.startsWith("/u/:path*"))
   ) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
@@ -37,6 +39,7 @@ export const config = {
     "/sign-in",
     "/dashboard/:path*",
     "/verify/:path*",
+    "/u/:path*",
     "/chat",
   ],
 };
