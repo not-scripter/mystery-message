@@ -12,14 +12,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Select,
   SelectContent,
   SelectGroup,
@@ -38,7 +30,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Moon, Sun, Cat } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { MessageSquareHeart } from "lucide-react";
@@ -55,8 +46,8 @@ export default function NavBar() {
   const user = session?.user as User;
 
   return (
-    <nav className="w-full sticky top-0 z-10 p-4 shadow-md backdrop-blur-md flex items-center justify-center">
-      <Container className="py-0">
+    <nav className="w-full sticky top-0 z-10 shadow-md backdrop-blur-md flex items-center justify-center">
+      <Container>
         <div className="w-full flex relative justify-between items-center">
           <Link href="/" prefetch className="grow-0">
             <MessageSquareHeart size="36" />
