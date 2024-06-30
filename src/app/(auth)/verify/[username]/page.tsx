@@ -1,5 +1,6 @@
 "use client";
 
+import Container from "@/components/Container";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -59,47 +60,49 @@ export default function page() {
   };
 
   return (
-    <div className="w-full max-w-md p-8 space-y-8 rounded-lg md:shadow-md">
-      <div className="text-center">
-        <h1 className="text-4xl font-extrabold tracking-tight lg:text-xl mb-6">
-          Verify your account
-        </h1>
-        <p className="mb-4">
-          Enter the verification code we send to your email
-        </p>
+    <Container>
+      <div className="w-full max-w-md p-8 space-y-8 rounded-lg md:shadow-md">
+        <div className="text-center">
+          <h1 className="text-4xl font-extrabold tracking-tight lg:text-xl mb-6">
+            Verify your account
+          </h1>
+          <p className="mb-4">
+            Enter the verification code we send to your email
+          </p>
+        </div>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6 flex flex-col items-center justify-center"
+          >
+            <FormField
+              name="code"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Verification Code</FormLabel>
+                  <FormControl>
+                    <InputOTP maxLength={6} {...field} className="w-full">
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="w-60">
+              Submit
+            </Button>
+          </form>
+        </Form>
       </div>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6 flex flex-col items-center justify-center"
-        >
-          <FormField
-            name="code"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Verification Code</FormLabel>
-                <FormControl>
-                  <InputOTP maxLength={6} {...field} className="w-full">
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                      <InputOTPSlot index={3} />
-                      <InputOTPSlot index={4} />
-                      <InputOTPSlot index={5} />
-                    </InputOTPGroup>
-                  </InputOTP>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="w-60">
-            Submit
-          </Button>
-        </form>
-      </Form>
-    </div>
+    </Container>
   );
 }

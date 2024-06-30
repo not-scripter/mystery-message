@@ -1,5 +1,6 @@
 "use client";
 
+import Container from "@/components/Container";
 import MessageCard from "@/components/MessageCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -145,67 +146,71 @@ export default function page() {
   }
 
   return (
-    <div className="my-8 md:mx-8 lg:mx-auto p-6 rounded w-full max-w-6xl">
-      <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
+    <Container>
+      <div className="rounded w-full">
+        <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
-          Visit to your profile
-          <Link href={profileUrl}>
-            <CircleArrowOutUpRight size={16} />
-          </Link>
-        </h2>
-        <div className="flex items-center">
-          <Input
-            type="text"
-            value={profileUrl}
-            disabled
-            className="w-full p-2 mr-2"
-          />
-          <Button onClick={copyToClipboard}>Copy</Button>
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
+            Visit to your profile
+            <Link href={profileUrl}>
+              <CircleArrowOutUpRight size={16} />
+            </Link>
+          </h2>
+          <div className="flex items-center">
+            <Input
+              type="text"
+              value={profileUrl}
+              disabled
+              className="w-full p-2 mr-2"
+            />
+            <Button onClick={copyToClipboard}>Copy</Button>
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center">
+            <Switch
+              {...register("acceptMessages")}
+              checked={acceptMessages}
+              onCheckedChange={handleSwitchChange}
+              disabled={isSwitchLoading}
+            />
+            <span className="ml-2">
+              Accepting Messages: {acceptMessages ? "On" : "Off"}
+            </span>
+          </div>
+          <Button
+            variant="outline"
+            onClick={(e) => {
+              e.preventDefault();
+              fetchMessages(true);
+            }}
+          >
+            {isloading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <RefreshCcw className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
+
+        <Separator />
+
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {messages.length > 0 ? (
+            messages.map((message, index) => (
+              <MessageCard
+                key={message._id}
+                message={message}
+                onMessageDelete={() => handleMessageDelete(message._id)}
+              />
+            ))
+          ) : (
+            <p>No messages to display.</p>
+          )}
         </div>
       </div>
-
-      <div className="mb-4 flex items-center">
-        <Switch
-          {...register("acceptMessages")}
-          checked={acceptMessages}
-          onCheckedChange={handleSwitchChange}
-          disabled={isSwitchLoading}
-        />
-        <span className="ml-2">
-          Accepting Messages: {acceptMessages ? "On" : "Off"}
-        </span>
-      </div>
-      <Separator />
-
-      <Button
-        className="mt-4"
-        variant="outline"
-        onClick={(e) => {
-          e.preventDefault();
-          fetchMessages(true);
-        }}
-      >
-        {isloading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          <RefreshCcw className="h-4 w-4" />
-        )}
-      </Button>
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {messages.length > 0 ? (
-          messages.map((message, index) => (
-            <MessageCard
-              key={message._id}
-              message={message}
-              onMessageDelete={() => handleMessageDelete(message._id)}
-            />
-          ))
-        ) : (
-          <p>No messages to display.</p>
-        )}
-      </div>
-    </div>
+    </Container>
   );
 }
