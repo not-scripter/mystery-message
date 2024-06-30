@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
     !token &&
     (url.pathname.startsWith("/dashboard") ||
       url.pathname.startsWith("/chat") ||
-      url.pathname.startsWith("/u/:path*"))
+      url.pathname.startsWith("/u"))
   ) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
